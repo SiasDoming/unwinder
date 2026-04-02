@@ -785,8 +785,7 @@ class Method(object):
 # frame PC address.
 class OpenJDKFrameDecorator(FrameDecorator):
     def __init__(self, base, methodname, filename, line):
-        super(FrameDecorator, self).__init__()
-        self._base = base
+        super(OpenJDKFrameDecorator, self).__init__(base)
         self._methodname = methodname
         self._filename = filename
         self._line = line
@@ -1141,6 +1140,8 @@ class OpenJDKUnwinder(Unwinder):
             regs = {"pc": "rip", "sp": "rsp", "bp": "rbp", "bcp": "r13"}
         elif arch == "i386":
             regs = {"pc": "eip", "sp": "esp", "bp": "ebp", "bcp": "esi"}
+        elif arch == "aarch64":
+            regs = {"pc": "pc", "sp": "sp", "bp": "x29", "bcp": "x22"}
         else:
             raise gdb.GdbError("dbg: Unsupported architecture %s!" % arch)
         return regs[name]
